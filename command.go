@@ -111,6 +111,7 @@ var (
 
 				err = check(timeout, readTimeout)
 				if err != nil {
+					fmt.Println(err)
 					fmt.Println(2)
 					os.Exit(2)
 				}
