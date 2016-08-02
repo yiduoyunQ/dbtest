@@ -99,7 +99,7 @@ var (
 					switch strings.ToLower(key) {
 					default:
 						continue
-					case "bind-address":
+					case "bind_address":
 						ip = val
 					case "port":
 						port, err = strconv.Atoi(val)
