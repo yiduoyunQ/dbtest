@@ -23,8 +23,7 @@ var (
 	defaultFile  = "/DBAASDAT/my.cnf"
 	defaultDb    = "dbaas_check"
 	defaultTable = "chk"
-	timeout      = 5 * time.Second
-	readTimeout  = 5 * time.Second
+	timeout      = 10 * time.Second
 
 	commands = []cli.Command{
 		// health check
@@ -56,9 +55,6 @@ var (
 				}
 				if c.IsSet("time-out") {
 					timeout = c.Duration("time-out")
-				}
-				if c.IsSet("read-time-out") {
-					readTimeout = c.Duration("read-time-out")
 				}
 
 				f, err := os.Open(defaultFile)
@@ -109,7 +105,7 @@ var (
 					}
 				}
 
-				err = check(timeout, readTimeout)
+				err = check(timeout)
 				if err != nil {
 					fmt.Println(err)
 					fmt.Println(2)
@@ -157,25 +153,21 @@ var (
 	}
 )
 
-func check(t, rt time.Duration) error {
+func check(t time.Duration) error {
 	tEnd := time.Now().Add(t)
-	rtEnd := time.Now().Add(rt)
 	_t := t
-	_rt := rt
 	// insert
-	//db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
-	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout=10")
-	log.Println(rootUser + ":" + rootPassword + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + defaultDb + "?timeout=" + _t.String())
+	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String())
 	if err != nil {
 		log.Println("insert sql.Open error")
 		return err
 	}
 	defer db1.Close()
-	//	err = db1.Ping()
-	//	if err != nil {
-	//		log.Println("insert db.Ping error")
-	//		return err
-	//	}
+	err = db1.Ping()
+	if err != nil {
+		log.Println("insert db.Ping error")
+		return err
+	}
 	_t = tEnd.Sub(time.Now())
 	rows1, err := db1.Query("insert into " + defaultTable + " values(1,'a');")
 	if err != nil {
@@ -188,23 +180,22 @@ func check(t, rt time.Duration) error {
 		log.Println("insert rows error")
 		return err
 	}
-	_rt = rtEnd.Sub(time.Now())
 
 	// select
-	if _t <= 0 || _rt <= 0 {
+	if _t <= 0 {
 		return fmt.Errorf("time out when excute select")
 	}
-	db2, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout=10")
+	db2, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String())
 	if err != nil {
 		log.Println("select sql.Open error")
 		return err
 	}
 	defer db2.Close()
-	//	err = db2.Ping()
-	//	if err != nil {
-	//		log.Println("select db.Ping error")
-	//		return err
-	//	}
+	err = db2.Ping()
+	if err != nil {
+		log.Println("select db.Ping error")
+		return err
+	}
 	_t = tEnd.Sub(time.Now())
 	rows2, err := db2.Query("select * from " + defaultTable + ";")
 	if err != nil {
@@ -217,23 +208,22 @@ func check(t, rt time.Duration) error {
 		log.Println("select rows error")
 		return err
 	}
-	_rt = rtEnd.Sub(time.Now())
 
 	// delete
-	if _t <= 0 || _rt <= 0 {
+	if _t <= 0 {
 		return fmt.Errorf("time out when excute delete")
 	}
-	db3, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout=10")
+	db3, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String())
 	if err != nil {
 		log.Println("delete sql.Open error")
 		return err
 	}
 	defer db3.Close()
-	//	err = db3.Ping()
-	//	if err != nil {
-	//		log.Println("delete db.Ping error")
-	//		return err
-	//	}
+	err = db3.Ping()
+	if err != nil {
+		log.Println("delete db.Ping error")
+		return err
+	}
 	rows3, err := db3.Query("delete from " + defaultTable + ";")
 	if err != nil {
 		log.Println("delete db.Query error")
