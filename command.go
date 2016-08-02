@@ -21,7 +21,7 @@ var (
 	ip           = ""
 	port         = 0
 	defaultFile  = "/DBAASDAT/my.cnf"
-	defaultDb    = "DBaaS_check"
+	defaultDb    = "dbaas_check"
 	defaultTable = "chk"
 	timeout      = 5 * time.Second
 	readTimeout  = 5 * time.Second
