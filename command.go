@@ -162,9 +162,8 @@ func check(t, rt time.Duration) error {
 	_t := t
 	_rt := rt
 	// insert
-	//db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
-	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout=15&readTimeout=15")
-	log.Println(rootUser + ":" + rootPassword + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + defaultDb + "?timeout=15&readTimeout=15")
+	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
+	log.Println(rootUser + ":" + rootPassword + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + defaultDb + "?timeout=" + _t.String() + "&readTimeout=" + _rt.String())
 	if err != nil {
 		log.Println("insert sql.Open error")
 		return err
@@ -199,11 +198,11 @@ func check(t, rt time.Duration) error {
 		return err
 	}
 	defer db2.Close()
-	err = db2.Ping()
-	if err != nil {
-		log.Println("select db.Ping error")
-		return err
-	}
+	//	err = db2.Ping()
+	//	if err != nil {
+	//		log.Println("select db.Ping error")
+	//		return err
+	//	}
 	_t = tEnd.Sub(time.Now())
 	rows2, err := db2.Query("select * from " + defaultTable + ";")
 	if err != nil {
@@ -228,11 +227,11 @@ func check(t, rt time.Duration) error {
 		return err
 	}
 	defer db3.Close()
-	err = db3.Ping()
-	if err != nil {
-		log.Println("delete db.Ping error")
-		return err
-	}
+	//	err = db3.Ping()
+	//	if err != nil {
+	//		log.Println("delete db.Ping error")
+	//		return err
+	//	}
 	rows3, err := db3.Query("delete from " + defaultTable + ";")
 	if err != nil {
 		log.Println("delete db.Query error")
