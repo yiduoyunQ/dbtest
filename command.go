@@ -162,8 +162,9 @@ func check(t, rt time.Duration) error {
 	_t := t
 	_rt := rt
 	// insert
-	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
-	log.Println(rootUser + ":" + rootPassword + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + defaultDb + "?timeout=" + _t.String() + "&readTimeout=" + _rt.String())
+	//db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
+	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout=15&readTimeout=15")
+	log.Println(rootUser + ":" + rootPassword + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + defaultDb + "?timeout=15&readTimeout=15")
 	if err != nil {
 		log.Println("insert sql.Open error")
 		return err
