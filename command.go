@@ -170,11 +170,11 @@ func check(t, rt time.Duration) error {
 		return err
 	}
 	defer db1.Close()
-	err = db1.Ping()
-	if err != nil {
-		log.Println("insert db.Ping error")
-		return err
-	}
+	//	err = db1.Ping()
+	//	if err != nil {
+	//		log.Println("insert db.Ping error")
+	//		return err
+	//	}
 	_t = tEnd.Sub(time.Now())
 	rows1, err := db1.Query("insert into " + defaultTable + " values(1,'a');")
 	if err != nil {
