@@ -164,8 +164,8 @@ func check(t, rt time.Duration) error {
 	_rt := rt
 	// insert
 	//db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
-	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb)
-	log.Println(rootUser + ":" + rootPassword + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + defaultDb + "?timeout=" + _t.String() + "&readTimeout=" + _rt.String())
+	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout=10")
+	log.Println(rootUser + ":" + rootPassword + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + defaultDb + "?timeout=" + _t.String())
 	if err != nil {
 		log.Println("insert sql.Open error")
 		return err
@@ -194,7 +194,7 @@ func check(t, rt time.Duration) error {
 	if _t <= 0 || _rt <= 0 {
 		return fmt.Errorf("time out when excute select")
 	}
-	db2, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
+	db2, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout=10")
 	if err != nil {
 		log.Println("select sql.Open error")
 		return err
@@ -223,7 +223,7 @@ func check(t, rt time.Duration) error {
 	if _t <= 0 || _rt <= 0 {
 		return fmt.Errorf("time out when excute delete")
 	}
-	db3, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
+	db3, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout=10")
 	if err != nil {
 		log.Println("delete sql.Open error")
 		return err
