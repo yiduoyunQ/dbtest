@@ -14,7 +14,9 @@ func main() {
 	app := cli.NewApp()
 	app.Name = path.Base(os.Args[0])
 	app.Usage = "upsql health check"
-	app.Version = "0.0.3"
+	app.Version = `
+0.0.4 修改user,password flag key name
+	`
 
 	app.Author = "qjr"
 	app.Email = "qiujirong@unionpay.com"

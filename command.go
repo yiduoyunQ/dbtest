@@ -16,15 +16,15 @@ import (
 )
 
 var (
-	rootUser     = "check"
-	rootPassword = "123.com"
-	ip           = ""
-	port         = 0
-	defaultFile  = "/DBAASDAT/my.cnf"
-	defaultDb    = "dbaas_check"
-	defaultTable = "chk"
-	timeout      = 5 * time.Second
-	readTimeout  = 5 * time.Second
+	checkUser     = "check"
+	checkPassword = "check"
+	ip            = ""
+	port          = 0
+	defaultFile   = "/DBAASDAT/my.cnf"
+	defaultDb     = "DBaaS_check"
+	defaultTable  = "chk"
+	timeout       = 5 * time.Second
+	readTimeout   = 5 * time.Second
 
 	commands = []cli.Command{
 		// health check
@@ -42,11 +42,11 @@ var (
 					cli.ShowVersion(c)
 					return
 				}
-				if c.IsSet("root-user") {
-					rootUser = c.String("root-user")
+				if c.IsSet("check-user") {
+					checkUser = c.String("check-user")
 				}
-				if c.IsSet("root-password") {
-					rootPassword = c.String("root-password")
+				if c.IsSet("check-password") {
+					checkPassword = c.String("check-password")
 				}
 				if c.IsSet("default-db") {
 					defaultDb = c.String("default-db")
@@ -124,12 +124,12 @@ var (
 			Usage: "print app version",
 		},
 		cli.StringFlag{
-			Name:  "root-user, u",
-			Usage: "root user",
+			Name:  "check-user, u",
+			Usage: "check user",
 		},
 		cli.StringFlag{
-			Name:  "root-password, p",
-			Usage: "root password",
+			Name:  "check-password, p",
+			Usage: "check password",
 		},
 		cli.StringFlag{
 			Name:  "default-file, 0",
@@ -162,7 +162,8 @@ func check(t, rt time.Duration) error {
 	_t := t
 	_rt := rt
 	// insert
-	db1, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
+	db1, err := sql.Open("mysql", checkUser+":"+checkPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
+	log.Println(checkUser + ":" + checkPassword + "@tcp(" + ip + ":" + strconv.Itoa(port) + ")/" + defaultDb + "?timeout=" + _t.String() + "&readTimeout=" + _rt.String())
 	if err != nil {
 		log.Println("insert sql.Open error")
 		return err
@@ -191,7 +192,7 @@ func check(t, rt time.Duration) error {
 	if _t <= 0 || _rt <= 0 {
 		return fmt.Errorf("time out when excute select")
 	}
-	db2, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
+	db2, err := sql.Open("mysql", checkUser+":"+checkPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
 	if err != nil {
 		log.Println("select sql.Open error")
 		return err
@@ -220,7 +221,7 @@ func check(t, rt time.Duration) error {
 	if _t <= 0 || _rt <= 0 {
 		return fmt.Errorf("time out when excute delete")
 	}
-	db3, err := sql.Open("mysql", rootUser+":"+rootPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
+	db3, err := sql.Open("mysql", checkUser+":"+checkPassword+"@tcp("+ip+":"+strconv.Itoa(port)+")/"+defaultDb+"?timeout="+_t.String()+"&readTimeout="+_rt.String())
 	if err != nil {
 		log.Println("delete sql.Open error")
 		return err
